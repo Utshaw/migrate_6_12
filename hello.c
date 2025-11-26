@@ -123,10 +123,8 @@ if (folio_mapcount(f) != 0) {
         return;
     }
 
-    /* Already on target node? */
-    if (folio_nid(src) == target_node) {
-        pr_debug("Skipping %p: already on nid=%d\n", page, target_node);
-        return;
+    if (folio_nid(src) == 1) {
+	target_node = 0;
     }
 
     dump_page_info(page);
@@ -194,7 +192,7 @@ static int my_pre_handler(struct kprobe *p, struct pt_regs *regs)
     page = get_page_arg(regs);
     if (!page)
         return 0;
-
+    dump_page_info(page);
     try_migrate_page(page);
     return 0;
 }
